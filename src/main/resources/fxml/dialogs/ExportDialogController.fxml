@@ -33,12 +33,12 @@
 
 
                    <fx:define>
-                       <ToggleGroup fx:id="colorFormatToggleGroup" />
+                       <ToggleGroup fx:id="colorSpaceToggleGroup" />
                    </fx:define>
                    <Label layoutX="61.0" layoutY="159.0" text="%colorSpace" AnchorPane.leftAnchor="61.0" />
-                   <RadioButton layoutX="72.0" layoutY="195.0" mnemonicParsing="false" text="%rgbColor" userData="0" selected="true" toggleGroup="$colorFormatToggleGroup">
+                   <RadioButton layoutX="72.0" layoutY="195.0" mnemonicParsing="false" text="%rgbColor" userData="0" selected="true" toggleGroup="$colorSpaceToggleGroup">
                    </RadioButton>
-                   <RadioButton layoutX="375.0" layoutY="195.0" mnemonicParsing="false" text="%cmykColor" userData="1" toggleGroup="$colorFormatToggleGroup">
+                   <RadioButton layoutX="375.0" layoutY="195.0" mnemonicParsing="false" text="%cmykColor" userData="1" toggleGroup="$colorSpaceToggleGroup">
                    </RadioButton>
                   <Separator layoutX="16.0" layoutY="325.0" prefWidth="200.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                   <Button layoutX="541.0" layoutY="380.0" mnemonicParsing="false" text="%cancelButton" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="200.0" fx:id="cancelButton" />

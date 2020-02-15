@@ -1,6 +1,7 @@
 package com.paipeng.colortool.controller;
 
 import com.paipeng.colortool.dialog.ExportDialogController;
+import com.paipeng.colortool.model.ExportImage;
 import com.paipeng.colortool.utils.CommonUtils;
 import com.paipeng.colortool.utils.ImageUtils;
 import javafx.beans.value.ChangeListener;
@@ -88,6 +89,7 @@ public class MainViewController implements Initializable {
     private int selectedColorPixel;
 
     private BufferedImage bufferedImage;
+    public BufferedImage coloredBufferedImage;
 
     private double[] cmyk;
 
@@ -97,7 +99,11 @@ public class MainViewController implements Initializable {
 
         setRGBColorTextFields(brightColor);
         setCMYKColorTextFields(brightColor);
-
+        if (coloredBufferedImage != null) {
+            exportButton.setDisable(false);
+        } else {
+            exportButton.setDisable(true);
+        }
         pixelColorPicker.setOnAction(event -> {
             logger.info(((ColorPicker) event.getTarget()).getValue().toString());
             if (selectedColorPixel == 0) {
@@ -195,9 +201,15 @@ public class MainViewController implements Initializable {
             //FileInputStream input = new FileInputStream(imagePath);
             //Image image = new Image(input);
             bufferedImage = ImageIO.read(new File(imagePath));
+            coloredBufferedImage = bufferedImage;
 
             imageView.setImage(ImageUtils.convertBufferedImageToImage(bufferedImage));
 
+            if (coloredBufferedImage != null) {
+                exportButton.setDisable(false);
+            } else {
+                exportButton.setDisable(true);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -243,8 +255,8 @@ public class MainViewController implements Initializable {
         logger.info("brightColor " + brightColor.toString());
         logger.info("darkColor " + darkColor.toString());
 
-        BufferedImage bufferedImage2 = ImageUtils.changeBufferedImageWithColor(bufferedImage, brightColor, darkColor);
-        imageView.setImage(ImageUtils.convertBufferedImageToImage(bufferedImage2));
+        coloredBufferedImage = ImageUtils.changeBufferedImageWithColor(bufferedImage, brightColor, darkColor);
+        imageView.setImage(ImageUtils.convertBufferedImageToImage(coloredBufferedImage));
     }
 
     private EventHandler textViewEventHandler = new EventHandler<KeyEvent>() {
@@ -295,8 +307,27 @@ public class MainViewController implements Initializable {
             ResourceBundle resources = ResourceBundle.getBundle("bundles.languages", CommonUtils.getCurrentLanguageLocale());
             Parent root = FXMLLoader.load(ExportDialogController.class.getResource(ExportDialogController.FXML_FILE), resources);
 
+
+            /*
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(ExportDialogController.FXML_FILE));
+            loader.setResources(resources);
+            Parent root = loader.load();
+            ExportDialogController controller = loader.<ExportDialogController>getController();
+            controller.setColoredBufferedImage(coloredBufferedImage);
+
+
+            */
+
+            ExportImage exportImage = new ExportImage();
+            exportImage.setBrightColor(brightColor);
+            exportImage.setDarkColor(darkColor);
+            exportImage.setCmyk(cmyk);
+            exportImage.setBufferedImage(bufferedImage);
+            exportImage.setColoredBufferedImage(coloredBufferedImage);
             final Scene scene = new Scene(root, 800, 600);
             scene.getStylesheets().add(getClass().getResource(ExportDialogController.CSS_FILE).toExternalForm());
+            scene.setUserData(exportImage);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
