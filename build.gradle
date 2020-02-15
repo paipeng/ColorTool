@@ -14,5 +14,8 @@ repositories {
 dependencies {
 
     compile project(':PdfUtils')
+    // https://mvnrepository.com/artifact/net.imagej/ij
+    compile group: 'net.imagej', name: 'ij', version: '1.52t'
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }

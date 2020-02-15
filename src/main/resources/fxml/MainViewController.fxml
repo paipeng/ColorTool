@@ -10,15 +10,16 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.ToggleGroup?>
 <VBox prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.paipeng.colortool.controller.MainViewController">
    <MenuBar prefHeight="0.0" prefWidth="1024.0">
       <menus>
@@ -66,16 +67,17 @@
             <fx:define>
                <ToggleGroup fx:id="colorToggleGroup" />
             </fx:define>
-            <RadioButton layoutX="27.0" layoutY="95.0" mnemonicParsing="false" selected="true" text="%brightPixel" userData="0" toggleGroup="$colorToggleGroup" />
+            <RadioButton layoutX="27.0" layoutY="95.0" mnemonicParsing="false" selected="true" text="%brightPixel" toggleGroup="$colorToggleGroup" userData="0">
+            </RadioButton>
+            <RadioButton layoutX="166.0" layoutY="95.0" mnemonicParsing="false" text="%darkPixel" toggleGroup="$colorToggleGroup" userData="1" />
 
-            <RadioButton layoutX="166.0" layoutY="95.0" mnemonicParsing="false" text="%darkPixel" userData="1" toggleGroup="$colorToggleGroup" />
          </AnchorPane>
 
          <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
                <Tab text="%rgbTab">
                   <content>
-                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" >
+                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <Label layoutX="9.0" layoutY="20.0" text="%redColor" />
                         <TextField fx:id="redColorTextField" layoutX="130.0" layoutY="15.0" prefWidth="60.0" />
 
@@ -92,7 +94,26 @@
                </Tab>
                <Tab text="%cmykTab">
                   <content>
-                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <Label layoutX="9.0" layoutY="20.0" text="%cyanColor" />
+                        <Slider layoutX="95.0" layoutY="20.0" min="0.0" max="1.0" fx:id="cyanColorSlider" />
+                        <TextField fx:id="cyanColorTextField" layoutX="236.0" layoutY="15.0" prefWidth="60.0" />
+
+                        <Label layoutX="9.0" layoutY="50.0" text="%magentaColor" />
+                        <Slider layoutX="95.0" layoutY="50.0" min="0.0" max="1.0" fx:id="magentaColorSlider" />
+                        <TextField fx:id="magentaColorTextField" layoutX="236.0" layoutY="45.0" prefWidth="60.0" />
+
+                        <Label layoutX="9.0" layoutY="80.0" text="%yellowColor" />
+                        <Slider layoutX="95.0" layoutY="80.0" min="0.0" max="1.0" fx:id="yellowColorSlider" />
+                        <TextField fx:id="yellowColorTextField" layoutX="236.0" layoutY="75.0" prefWidth="60.0" />
+
+                        <Label layoutX="9.0" layoutY="110.0" text="%keyColor" />
+                        <Slider layoutX="95.0" layoutY="110.0" min="0.0" max="1.0" fx:id="keyColorSlider" />
+                        <TextField fx:id="keyColorTextField" layoutX="236.0" layoutY="105.0" prefWidth="60.0" />
+
+
+
+                     </AnchorPane>
                   </content>
                </Tab>
             </tabs>
