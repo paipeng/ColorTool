@@ -1,12 +1,17 @@
 package com.paipeng.colortool.utils;
 
+import com.twelvemonkeys.imageio.color.ColorSpaces;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.ComponentColorModel;
+import java.awt.image.DataBuffer;
 
 
 public class ImageUtils {
@@ -101,6 +106,37 @@ public class ImageUtils {
         Graphics g = b.getGraphics();
         g.drawImage(source, 0, 0, null);
         g.dispose();
+        return b;
+    }
+
+
+    public static BufferedImage copyBUfferedImageRGBToCMYK(BufferedImage source) {
+        // I'm using my own TwelveMonkeys ImageIO library for this,
+        // but I think you can use the one you used above, like:
+        // ColorSpace cmykCS = ColorSpaces.getDeviceCMYKColorSpace()
+        ColorSpace cmykCS = ColorSpaces.getColorSpace(ColorSpaces.CS_GENERIC_CMYK);
+
+        // Create CMYK color model, raster and image
+        ColorModel colorModel = new ComponentColorModel(cmykCS, false, false, Transparency.OPAQUE, DataBuffer.TYPE_BYTE);
+        BufferedImage b = new BufferedImage(colorModel, colorModel.createCompatibleWritableRaster(source.getWidth(), source.getHeight()), colorModel.isAlphaPremultiplied(), null);
+
+        // Paint some sample rectangles on it
+        Graphics2D g = b.createGraphics();
+        try {
+            g.setColor(new java.awt.Color(cmykCS, new float[] {0, 0, 0, 0}, 1.0f)); // All 0 (White)
+            g.fillRect(0, 0, 25, 50);
+            g.setColor(new java.awt.Color(cmykCS, new float[] {0, 0, 0, 1}, 1.0f)); // Key (Black)
+            g.fillRect(25, 0, 25, 50);
+            g.setColor(new java.awt.Color(cmykCS, new float[] {1, 0, 0, 0}, 1.0f)); // Cyan
+            g.fillRect(50, 0, 50, 50);
+            g.setColor(new java.awt.Color(cmykCS, new float[] {0, 1, 0, 0}, 1.0f)); // Magenta
+            g.fillRect(0, 50, 50, 50);
+            g.setColor(new java.awt.Color(cmykCS, new float[] {0, 0, 1, 0}, 1.0f)); // Yellow
+            g.fillRect(50, 50, 50, 50);
+        }
+        finally {
+            g.dispose();
+        }
         return b;
     }
 

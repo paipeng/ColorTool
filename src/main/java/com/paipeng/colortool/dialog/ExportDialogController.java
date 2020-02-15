@@ -2,6 +2,7 @@ package com.paipeng.colortool.dialog;
 
 import com.paipeng.colortool.model.ExportImage;
 import com.paipeng.colortool.model.PrintDPI;
+import com.paipeng.colortool.utils.ImageUtils;
 import com.twelvemonkeys.imageio.metadata.Entry;
 import com.twelvemonkeys.imageio.metadata.tiff.Rational;
 import com.twelvemonkeys.imageio.metadata.tiff.TIFF;
@@ -28,6 +29,7 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.stream.ImageOutputStream;
+import java.awt.color.ColorSpace;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -168,6 +170,9 @@ public class ExportDialogController implements Initializable {
 
         } else if (colorSpace == 1) {
             // convert buffered image to cmyk buffered image and store into coloredBufferedImage  twelve monkey
+
+
+            exportImage.setColoredBufferedImage(ImageUtils.copyBUfferedImageRGBToCMYK(exportImage.getBufferedImage()));
         }
 
 
