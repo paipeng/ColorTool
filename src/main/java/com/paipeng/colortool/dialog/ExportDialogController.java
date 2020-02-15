@@ -172,6 +172,10 @@ public class ExportDialogController implements Initializable {
         } else if (colorSpace == 1) {
             // convert buffered image to cmyk buffered image and store into coloredBufferedImage  twelve monkey
 
+            logger.info("brightCMYK " + exportImage.getBrightCMYK()[0] + "-" + exportImage.getBrightCMYK()[1] + "-"
+                    + exportImage.getBrightCMYK()[2] + "-" + exportImage.getBrightCMYK()[3]);
+            logger.info("darkCMYK " + exportImage.getDarkCMYK()[0] + "-" + exportImage.getDarkCMYK()[1] + "-"
+                    + exportImage.getDarkCMYK()[2] + "-" + exportImage.getDarkCMYK()[3]);
 
             exportImage.setColoredBufferedImage(ImageUtils.copyBUfferedImageRGBToCMYK(exportImage.getBufferedImage(), exportImage.getBrightCMYK(), exportImage.getDarkCMYK()));
         }
@@ -182,45 +186,8 @@ public class ExportDialogController implements Initializable {
             // write coloredBufferedImage into tiff desitnationFileName
             try {
 
-                final ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(desitnationFileName);
+                ImageUtils.saveBufferedImageToTiff(exportImage.getColoredBufferedImage(), printDpi, desitnationFileName);
 
-                if (imageOutputStream == null) {
-                    throw new IOException("Unable to obtain an output stream for file: " + desitnationFileName);
-                }
-
-
-                // set the byte order to little endian
-                // our various imaging systems downstream will not be able to support the
-                // big endian (motorola) byte order
-
-
-                imageOutputStream.setByteOrder(ByteOrder.LITTLE_ENDIAN);
-
-                final Iterator<ImageWriter> imageWriters = ImageIO.getImageWritersByFormatName("tif");
-                if (imageWriters == null) {
-                    throw new IOException("Unable to obtain an image writer for the tif file format!");
-                }
-
-
-                // select the first writer available
-
-
-                final ImageWriter imageWriter = imageWriters.next();
-                imageWriter.setOutput(imageOutputStream);
-                final ImageWriteParam parameters = imageWriter.getDefaultWriteParam();
-                //parameters.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-                //parameters.setCompressionType("CCITT T.6"); // Group 4 Compression
-                //parameters.setCompressionQuality(0.2f);
-
-                final List<Entry> entries = new ArrayList<Entry>();
-                entries.add(new TIFFEntry(TIFF.TAG_X_RESOLUTION, new Rational(printDpi)));
-                entries.add(new TIFFEntry(TIFF.TAG_Y_RESOLUTION, new Rational(printDpi)));
-
-                final IIOMetadata tiffImageMetadata = new TIFFImageMetadata(entries);
-
-                //imageWriter.write(tiffImageMetadata, new IIOImage(exportImage.getColoredBufferedImage(), null, null), parameters);
-
-                imageWriter.write(null, new IIOImage(exportImage.getColoredBufferedImage(), null, tiffImageMetadata), parameters);
                 close();
             } catch (IOException e) {
                 e.printStackTrace();

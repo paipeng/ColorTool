@@ -1,17 +1,34 @@
 package com.paipeng.colortool.utils;
 
 import com.twelvemonkeys.imageio.color.ColorSpaces;
+import com.twelvemonkeys.imageio.metadata.Entry;
+import com.twelvemonkeys.imageio.metadata.tiff.Rational;
+import com.twelvemonkeys.imageio.metadata.tiff.TIFF;
+import com.twelvemonkeys.imageio.metadata.tiff.TIFFEntry;
+import com.twelvemonkeys.imageio.plugins.tiff.TIFFImageMetadata;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.ComponentColorModel;
 import java.awt.image.DataBuffer;
+import java.io.File;
+import java.io.IOException;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class ImageUtils {
@@ -145,16 +162,66 @@ public class ImageUtils {
                 int pixelColor = bufferedImage.getRGB(x, y);
 
                 if (Color.rgb(pixelColor& 0xFFFFFF >> 16, pixelColor& 0xFFFF >> 8, pixelColor& 0xFF).getBrightness() > 122.0/255) {
-                    int rgb = 0;//((red & 0xFF) << 16) | ((green & 0xFF) << 8) | (blue & 0xFF);
+                    //int rgb = 0;//((red & 0xFF) << 16) | ((green & 0xFF) << 8) | (blue & 0xFF);
                     //int rgb = (blue << 16) | (green & 0x0ff << 8) | (red & 0x0ff);
-                    b.setRGB(x, y, rgb);
-
+                    //b.setRGB(x, y, rgb);
+                    g.setColor(new java.awt.Color(cmykCS, new float[] {(float) brightCMYK[0], (float) brightCMYK[1], (float) brightCMYK[2], (float) brightCMYK[3]}, 1.0f)); // All 0 (White)
+                    g.fillRect(x, y, 1, 1);
+                } else {
+                    g.setColor(new java.awt.Color(cmykCS, new float[] {(float) darkCMYK[0], (float) darkCMYK[1], (float) darkCMYK[2], (float) darkCMYK[3]}, 1.0f)); // All 0 (White)
+                    g.fillRect(x, y, 1, 1);
                 }
-                bufferedImage.setRGB(x, y, bufferedImage.getRGB(x, y));
+               //bufferedImage.setRGB(x, y, bufferedImage.getRGB(x, y));
             }
         }
         g.dispose();
         return b;
+    }
+
+    public static void saveBufferedImageToTiff(BufferedImage bufferedImage, int printDpi, File desitnationFileName) throws IOException {
+        final ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(desitnationFileName);
+
+        if (imageOutputStream == null) {
+            throw new IOException("Unable to obtain an output stream for file: " + desitnationFileName);
+        }
+
+
+        // set the byte order to little endian
+        // our various imaging systems downstream will not be able to support the
+        // big endian (motorola) byte order
+
+
+        imageOutputStream.setByteOrder(ByteOrder.LITTLE_ENDIAN);
+
+        final Iterator<ImageWriter> imageWriters = ImageIO.getImageWritersByFormatName("tif");
+        if (imageWriters == null) {
+            throw new IOException("Unable to obtain an image writer for the tif file format!");
+        }
+
+
+        // select the first writer available
+
+
+        final ImageWriter imageWriter = imageWriters.next();
+        imageWriter.setOutput(imageOutputStream);
+        final ImageWriteParam parameters = imageWriter.getDefaultWriteParam();
+        //parameters.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        //parameters.setCompressionType("CCITT T.6"); // Group 4 Compression
+        //parameters.setCompressionQuality(0.2f);
+
+        final List<Entry> entries = new ArrayList<Entry>();
+        entries.add(new TIFFEntry(TIFF.TAG_X_RESOLUTION, new Rational(printDpi)));
+        entries.add(new TIFFEntry(TIFF.TAG_Y_RESOLUTION, new Rational(printDpi)));
+
+        final IIOMetadata tiffImageMetadata = new TIFFImageMetadata(entries);
+
+        //imageWriter.write(tiffImageMetadata, new IIOImage(exportImage.getColoredBufferedImage(), null, null), parameters);
+
+        imageWriter.write(null, new IIOImage(bufferedImage, null, tiffImageMetadata), parameters);
+
+
+        imageOutputStream.close();
+
     }
 
     public static Color convertCMYKToRGB(double cyan, double magenta, double yellow, double key) {
