@@ -63,15 +63,14 @@
             <Label layoutX="9.0" layoutY="25.0" text="%backgroundImage" />
             <Button fx:id="backgroundImageButton" layoutX="130.0" layoutY="20.0" mnemonicParsing="false" text="%backgroundImage" />
             <Separator layoutX="0.0" layoutY="60.0" prefHeight="17.0" prefWidth="316.0" />
-            <RadioButton layoutX="27.0" layoutY="95.0" mnemonicParsing="false" selected="true" text="%brightPixel" userData="0">
-               <toggleGroup>
-                  <ToggleGroup fx:id="colorToggleGroup" />
-               </toggleGroup></RadioButton>
-            <RadioButton layoutX="166.0" layoutY="95.0" mnemonicParsing="false" text="%darkPixel" toggleGroup="$colorToggleGroup" userData="1" />
 
             <fx:define>
                <ToggleGroup fx:id="colorToggleGroup" />
             </fx:define>
+
+            <RadioButton layoutX="27.0" layoutY="95.0" mnemonicParsing="false" selected="true" text="%brightPixel" userData="0" toggleGroup="$colorToggleGroup"></RadioButton>
+            <RadioButton layoutX="166.0" layoutY="95.0" mnemonicParsing="false" text="%darkPixel" toggleGroup="$colorToggleGroup" userData="1" />
+
 
          </AnchorPane>
 
