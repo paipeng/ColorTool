@@ -1,5 +1,6 @@
 package com.paipeng.colortool.controller;
 
+import com.paipeng.colortool.dialog.ExportDialogController;
 import com.paipeng.colortool.utils.CommonUtils;
 import com.paipeng.colortool.utils.ImageUtils;
 import javafx.beans.value.ChangeListener;
@@ -12,23 +13,21 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -42,9 +41,6 @@ public class MainViewController implements Initializable {
 
     @FXML
     private Button backgroundImageButton;
-
-    @FXML
-    private ColorPicker backgroundColorPicker;
 
     @FXML
     private ColorPicker pixelColorPicker;
@@ -80,10 +76,12 @@ public class MainViewController implements Initializable {
     @FXML
     private TextField keyColorTextField;
 
+    @FXML
+    private Button exportButton;
+
 
     private String imagePath;
 
-    private Color backgroundColor;
 
     private Color brightColor = Color.WHITE;
     private Color darkColor = Color.BLACK;
@@ -131,6 +129,7 @@ public class MainViewController implements Initializable {
 
         imagePath = this.getClass().getResource("/images/image_view_holder.png").getPath();
 
+        imagePath = "/Users/paipeng/Downloads/NanoGrid_0165000000040001.tif";
         showImage(imagePath);
 
         colorToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
@@ -166,6 +165,18 @@ public class MainViewController implements Initializable {
 
 
         setCMYKColorTextFields(brightColor);
+
+        exportButton.setOnAction(e -> {
+            /*
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete " + 1 + " ?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                //do stuff
+            }
+            */
+            showExportDialog();
+        });
     }
 
 
@@ -288,6 +299,27 @@ public class MainViewController implements Initializable {
             ex.printStackTrace();
         }
     }
+
+
+    private void showExportDialog() {
+
+
+        try {
+            ResourceBundle resources = ResourceBundle.getBundle("bundles.languages", CommonUtils.getCurrentLanguageLocale());
+            Parent root = FXMLLoader.load(ExportDialogController.class.getResource(ExportDialogController.FXML_FILE),resources);
+
+            final Scene scene = new Scene(root, 250, 150);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initOwner(exportButton.getScene().getWindow());
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void drawShapes() {
         /*

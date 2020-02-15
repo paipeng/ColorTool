@@ -63,13 +63,15 @@
             <Label layoutX="9.0" layoutY="25.0" text="%backgroundImage" />
             <Button fx:id="backgroundImageButton" layoutX="130.0" layoutY="20.0" mnemonicParsing="false" text="%backgroundImage" />
             <Separator layoutX="0.0" layoutY="60.0" prefHeight="17.0" prefWidth="316.0" />
+            <RadioButton layoutX="27.0" layoutY="95.0" mnemonicParsing="false" selected="true" text="%brightPixel" userData="0">
+               <toggleGroup>
+                  <ToggleGroup fx:id="colorToggleGroup" />
+               </toggleGroup></RadioButton>
+            <RadioButton layoutX="166.0" layoutY="95.0" mnemonicParsing="false" text="%darkPixel" toggleGroup="$colorToggleGroup" userData="1" />
 
             <fx:define>
                <ToggleGroup fx:id="colorToggleGroup" />
             </fx:define>
-            <RadioButton layoutX="27.0" layoutY="95.0" mnemonicParsing="false" selected="true" text="%brightPixel" toggleGroup="$colorToggleGroup" userData="0">
-            </RadioButton>
-            <RadioButton layoutX="166.0" layoutY="95.0" mnemonicParsing="false" text="%darkPixel" toggleGroup="$colorToggleGroup" userData="1" />
 
          </AnchorPane>
 
@@ -96,19 +98,19 @@
                   <content>
                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <Label layoutX="9.0" layoutY="20.0" text="%cyanColor" />
-                        <Slider layoutX="95.0" layoutY="20.0" min="0.0" max="1.0" fx:id="cyanColorSlider" />
+                        <Slider fx:id="cyanColorSlider" layoutX="95.0" layoutY="20.0" max="1.0" min="0.0" />
                         <TextField fx:id="cyanColorTextField" layoutX="236.0" layoutY="15.0" prefWidth="60.0" />
 
                         <Label layoutX="9.0" layoutY="50.0" text="%magentaColor" />
-                        <Slider layoutX="95.0" layoutY="50.0" min="0.0" max="1.0" fx:id="magentaColorSlider" />
+                        <Slider fx:id="magentaColorSlider" layoutX="95.0" layoutY="50.0" max="1.0" min="0.0" />
                         <TextField fx:id="magentaColorTextField" layoutX="236.0" layoutY="45.0" prefWidth="60.0" />
 
                         <Label layoutX="9.0" layoutY="80.0" text="%yellowColor" />
-                        <Slider layoutX="95.0" layoutY="80.0" min="0.0" max="1.0" fx:id="yellowColorSlider" />
+                        <Slider fx:id="yellowColorSlider" layoutX="95.0" layoutY="80.0" max="1.0" min="0.0" />
                         <TextField fx:id="yellowColorTextField" layoutX="236.0" layoutY="75.0" prefWidth="60.0" />
 
                         <Label layoutX="9.0" layoutY="110.0" text="%keyColor" />
-                        <Slider layoutX="95.0" layoutY="110.0" min="0.0" max="1.0" fx:id="keyColorSlider" />
+                        <Slider fx:id="keyColorSlider" layoutX="95.0" layoutY="110.0" max="1.0" min="0.0" />
                         <TextField fx:id="keyColorTextField" layoutX="236.0" layoutY="105.0" prefWidth="60.0" />
 
 
@@ -120,11 +122,8 @@
          </TabPane>
          <AnchorPane maxWidth="300" prefHeight="438.0" prefWidth="300.0">
             <children>
-               <Label layoutX="9.0" layoutY="80.0" text="labelPrintDpi" />
-               <TextField fx:id="labelPrintDpiTextField" layoutX="130.0" layoutY="75.0" prefWidth="60.0" />
 
-               <ColorPicker fx:id="backgroundColorPicker" layoutX="130.0" layoutY="110.0" />
-               <Label layoutX="9.0" layoutY="115.0" text="%background" />
+               <Button layoutX="95.0" layoutY="306.0" mnemonicParsing="false" text="%exportButton" fx:id="exportButton" />
             </children>
          </AnchorPane>
 
