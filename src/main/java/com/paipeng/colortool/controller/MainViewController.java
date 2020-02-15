@@ -100,6 +100,9 @@ public class MainViewController implements Initializable {
 
         setRGBColorTextFields(brightColor);
         setCMYKColorTextFields(brightColor);
+        updateCMYK(0, brightColor);
+        updateCMYK(1, darkColor);
+
         if (coloredBufferedImage != null) {
             exportButton.setDisable(false);
         } else {
