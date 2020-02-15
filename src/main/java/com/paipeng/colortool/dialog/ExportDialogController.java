@@ -104,7 +104,8 @@ public class ExportDialogController implements Initializable {
 
             logger.info("brightColor " + exportImage.getBrightColor().toString());
             logger.info("darkColor " + exportImage.getDarkColor().toString());
-            logger.info("cmyk: " + exportImage.getCmyk());
+            logger.info("bright cmyk: " + exportImage.getBrightCMYK());
+            logger.info("dark cmyk: " + exportImage.getDarkCMYK());
             logger.info("bufferedImage: " + exportImage.getBufferedImage());
 
             FileChooser fileChooser = new FileChooser();
@@ -172,7 +173,7 @@ public class ExportDialogController implements Initializable {
             // convert buffered image to cmyk buffered image and store into coloredBufferedImage  twelve monkey
 
 
-            exportImage.setColoredBufferedImage(ImageUtils.copyBUfferedImageRGBToCMYK(exportImage.getBufferedImage()));
+            exportImage.setColoredBufferedImage(ImageUtils.copyBUfferedImageRGBToCMYK(exportImage.getBufferedImage(), exportImage.getBrightCMYK(), exportImage.getDarkCMYK()));
         }
 
 

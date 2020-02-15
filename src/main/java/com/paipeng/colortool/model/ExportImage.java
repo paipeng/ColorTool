@@ -7,7 +7,8 @@ import java.awt.image.BufferedImage;
 public class ExportImage {
     private Color brightColor;
     private Color darkColor;
-    private double[] cmyk;
+    private double[] brightCMYK;
+    private double[] darkCMYK;
     private BufferedImage bufferedImage;
     private BufferedImage coloredBufferedImage;
 
@@ -27,12 +28,20 @@ public class ExportImage {
         this.darkColor = darkColor;
     }
 
-    public double[] getCmyk() {
-        return cmyk;
+    public double[] getBrightCMYK() {
+        return brightCMYK;
     }
 
-    public void setCmyk(double[] cmyk) {
-        this.cmyk = cmyk;
+    public void setBrightCMYK(double[] brightCMYK) {
+        this.brightCMYK = brightCMYK;
+    }
+
+    public double[] getDarkCMYK() {
+        return darkCMYK;
+    }
+
+    public void setDarkCMYK(double[] darkCMYK) {
+        this.darkCMYK = darkCMYK;
     }
 
     public BufferedImage getBufferedImage() {

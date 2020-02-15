@@ -91,7 +91,8 @@ public class MainViewController implements Initializable {
     private BufferedImage bufferedImage;
     public BufferedImage coloredBufferedImage;
 
-    private double[] cmyk;
+    private double[] brightCMYK;
+    private double[] darkCMYK;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -109,9 +110,11 @@ public class MainViewController implements Initializable {
             if (selectedColorPixel == 0) {
                 // brightColor
                 brightColor = ((ColorPicker) event.getTarget()).getValue();
+                updateCMYK(selectedColorPixel, brightColor);
             } else {
                 // darkColor
                 darkColor = ((ColorPicker) event.getTarget()).getValue();
+                updateCMYK(selectedColorPixel, darkColor);
             }
 
             setRGBColorTextFields(((ColorPicker) event.getTarget()).getValue());
@@ -184,7 +187,7 @@ public class MainViewController implements Initializable {
     }
 
     private void setCMYKColorTextFields(Color color) {
-        cmyk = ImageUtils.convertRGBToCMYK(color);
+        double[] cmyk = ImageUtils.convertRGBToCMYK(color);
         cyanColorTextField.setText(String.valueOf(cmyk[0]));
         magentaColorTextField.setText(String.valueOf(cmyk[1]));
         yellowColorTextField.setText(String.valueOf(cmyk[2]));
@@ -194,6 +197,15 @@ public class MainViewController implements Initializable {
         magentaColorSlider.setValue(cmyk[1]);
         yellowColorSlider.setValue(cmyk[2]);
         keyColorSlider.setValue(cmyk[3]);
+    }
+
+    private void updateCMYK(int selectedColorPixel, Color color) {
+        double[] cmyk = ImageUtils.convertRGBToCMYK(color);
+        if (selectedColorPixel == 0) {
+            brightCMYK = cmyk;
+        } else {
+            darkCMYK = cmyk;
+        }
     }
 
     private void showImage(String imagePath) {
@@ -322,7 +334,8 @@ public class MainViewController implements Initializable {
             ExportImage exportImage = new ExportImage();
             exportImage.setBrightColor(brightColor);
             exportImage.setDarkColor(darkColor);
-            exportImage.setCmyk(cmyk);
+            exportImage.setBrightCMYK(brightCMYK);
+            exportImage.setDarkCMYK(darkCMYK);
             exportImage.setBufferedImage(bufferedImage);
             exportImage.setColoredBufferedImage(coloredBufferedImage);
             final Scene scene = new Scene(root, 800, 600);

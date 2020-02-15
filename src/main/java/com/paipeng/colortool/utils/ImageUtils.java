@@ -110,7 +110,7 @@ public class ImageUtils {
     }
 
 
-    public static BufferedImage copyBUfferedImageRGBToCMYK(BufferedImage source) {
+    public static BufferedImage copyBUfferedImageRGBToCMYK(BufferedImage bufferedImage, double[] brightCMYK, double[] darkCMYK) {
         // I'm using my own TwelveMonkeys ImageIO library for this,
         // but I think you can use the one you used above, like:
         // ColorSpace cmykCS = ColorSpaces.getDeviceCMYKColorSpace()
@@ -118,10 +118,11 @@ public class ImageUtils {
 
         // Create CMYK color model, raster and image
         ColorModel colorModel = new ComponentColorModel(cmykCS, false, false, Transparency.OPAQUE, DataBuffer.TYPE_BYTE);
-        BufferedImage b = new BufferedImage(colorModel, colorModel.createCompatibleWritableRaster(source.getWidth(), source.getHeight()), colorModel.isAlphaPremultiplied(), null);
+        BufferedImage b = new BufferedImage(colorModel, colorModel.createCompatibleWritableRaster(bufferedImage.getWidth(), bufferedImage.getHeight()), colorModel.isAlphaPremultiplied(), null);
 
+        /*
         // Paint some sample rectangles on it
-        Graphics2D g = b.createGraphics();
+
         try {
             g.setColor(new java.awt.Color(cmykCS, new float[] {0, 0, 0, 0}, 1.0f)); // All 0 (White)
             g.fillRect(0, 0, 25, 50);
@@ -137,6 +138,22 @@ public class ImageUtils {
         finally {
             g.dispose();
         }
+        */
+        Graphics2D g = b.createGraphics();
+        for (int x = 0; x < bufferedImage.getWidth(); x++) {
+            for (int y = 0; y < bufferedImage.getHeight(); y++) {
+                int pixelColor = bufferedImage.getRGB(x, y);
+
+                if (Color.rgb(pixelColor& 0xFFFFFF >> 16, pixelColor& 0xFFFF >> 8, pixelColor& 0xFF).getBrightness() > 122.0/255) {
+                    int rgb = 0;//((red & 0xFF) << 16) | ((green & 0xFF) << 8) | (blue & 0xFF);
+                    //int rgb = (blue << 16) | (green & 0x0ff << 8) | (red & 0x0ff);
+                    b.setRGB(x, y, rgb);
+
+                }
+                bufferedImage.setRGB(x, y, bufferedImage.getRGB(x, y));
+            }
+        }
+        g.dispose();
         return b;
     }
 
