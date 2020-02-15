@@ -3,11 +3,7 @@ package com.paipeng.colortool.dialog;
 import com.paipeng.colortool.model.ExportImage;
 import com.paipeng.colortool.model.PrintDPI;
 import com.paipeng.colortool.utils.ImageUtils;
-import com.twelvemonkeys.imageio.metadata.Entry;
-import com.twelvemonkeys.imageio.metadata.tiff.Rational;
-import com.twelvemonkeys.imageio.metadata.tiff.TIFF;
-import com.twelvemonkeys.imageio.metadata.tiff.TIFFEntry;
-import com.twelvemonkeys.imageio.plugins.tiff.TIFFImageMetadata;
+import com.paipeng.pdf.PDFUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -22,21 +18,16 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.apache.log4j.Logger;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.stream.ImageOutputStream;
-import java.awt.color.ColorSpace;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
 public class ExportDialogController implements Initializable {
@@ -97,9 +88,8 @@ public class ExportDialogController implements Initializable {
         });
 
 
-
         saveButton.setOnAction(e -> {
-            exportImage  = (ExportImage) saveButton.getScene().getUserData();
+            exportImage = (ExportImage) saveButton.getScene().getUserData();
             logger.info("DPI " + printDpi + " imageFormat: " + imageFormat + " colorSpace: " + colorSpace + " setColoredBufferedImage" + exportImage.getColoredBufferedImage());
 
             logger.info("brightColor " + exportImage.getBrightColor().toString());
@@ -136,7 +126,6 @@ public class ExportDialogController implements Initializable {
         });
 
 
-
         imageFormatToggleGroup.selectedToggleProperty().addListener(toggleGroupChangeListener);
         colorSpaceToggleGroup.selectedToggleProperty().addListener(toggleGroupChangeListener);
     }
@@ -144,7 +133,7 @@ public class ExportDialogController implements Initializable {
     private ChangeListener toggleGroupChangeListener = new ChangeListener<Toggle>() {
         @Override
         public void changed(ObservableValue observable, Toggle oldValue, Toggle newValue) {
-            logger.info(((Toggle)observable.getValue()).getToggleGroup().getSelectedToggle().getUserData().toString());
+            logger.info(((Toggle) observable.getValue()).getToggleGroup().getSelectedToggle().getUserData().toString());
             try {
                 if (imageFormatToggleGroup == ((Toggle) observable.getValue()).getToggleGroup()) {
                     imageFormat = Integer.valueOf(newValue.getUserData().toString()).intValue();
@@ -195,7 +184,46 @@ public class ExportDialogController implements Initializable {
         } else {
             // pdf
             // write coloredBufferedImage into desitnationFileName pdf pdfutils
+
+
+            try {
+                createPDF(exportImage.getColoredBufferedImage(), printDpi, desitnationFileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            close();
         }
+
+
     }
 
+    private void createPDF(BufferedImage bufferedImage, int printDpi, File desitnationFileName) throws Exception {
+        PDDocument pdfDoc = new PDDocument();
+
+        PDPage page = new PDPage(PDRectangle.A4);
+        pdfDoc.addPage(page);
+
+        PDDocumentInformation pdi = pdfDoc.getDocumentInformation();
+
+        pdi.setAuthor("Pai Peng");
+        pdi.setTitle("ColorTool");
+        pdi.setCreator("Pai Peng");
+        pdi.setSubject("ColorTool");
+        pdi.setProducer("Pai Peng");
+        pdi.setTrapped("True");
+        pdi.setCustomMetadataValue("test", "value1");
+
+        Calendar date = Calendar.getInstance();
+        pdi.setCreationDate(date);
+        pdi.setModificationDate(date);
+
+        pdi.setKeywords("CMYK RGB PDF TIF");
+
+
+        PDFUtils.insertImage(pdfDoc, 0, bufferedImage, 400, 200, printDpi);
+
+        //PdfUtils.encryptPDF(pdfDoc, "12345", "123");
+
+        pdfDoc.save(desitnationFileName.getAbsolutePath());
+    }
 }
