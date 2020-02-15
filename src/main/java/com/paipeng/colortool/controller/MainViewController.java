@@ -15,6 +15,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -22,9 +23,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -34,17 +38,27 @@ public class MainViewController implements Initializable {
     private static final String FXML_FILE = "/fxml/MainViewController.fxml";
 
 
+    @FXML
+    private Button backgroundImageButton;
+
+    @FXML
+    private ColorPicker backgroundColorPicker;
+
+    @FXML
+    private ImageView imageView;
+
     private String imagePath;
 
+    private Color backgroundColor;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.info("initialize");
-/*
+
         backgroundColorPicker.setOnAction(event -> {
             backgroundColor = backgroundColorPicker.getValue();
-            GraphicsContext gc = labelCanvas.getGraphicsContext2D();
-            gc.setFill(backgroundColorPicker.getValue());
-            gc.fillRect(0, 0, labelCanvas.getWidth(), labelCanvas.getHeight());
+            //GraphicsContext gc = labelCanvas.getGraphicsContext2D();
+            //gc.setFill(backgroundColorPicker.getValue());
+            //gc.fillRect(0, 0, labelCanvas.getWidth(), labelCanvas.getHeight());
         });
 
         FileChooser fileChooser = new FileChooser();
@@ -53,8 +67,11 @@ public class MainViewController implements Initializable {
             File selectedFile = fileChooser.showOpenDialog(((Node) e.getTarget()).getScene().getWindow());
             logger.info("selected file: " + selectedFile.getAbsolutePath());
             imagePath = selectedFile.getAbsolutePath();
-            drawImage(imagePath);
+            //drawImage(imagePath);
+
+            showImage(imagePath);
         });
+        /*
 
         DropShadow ds = new DropShadow();
         ds.setOffsetY(3.0);
@@ -73,6 +90,25 @@ public class MainViewController implements Initializable {
         imagePath = this.getClass().getResource("/images/timg.jpeg").getPath();
         drawImage(imagePath);
         */
+
+        imagePath = this.getClass().getResource("/images/image_view_holder.png").getPath();
+
+        showImage(imagePath);
+    }
+
+    private void showImage(String imagePath) {
+        try {
+            FileInputStream input = new FileInputStream(imagePath);
+            BufferedImage imageCMYK = ImageIO.read(new File(imagePath));
+
+            Image image = new Image(input);
+            imageView.setImage(CommonUtils.convertBufferedImageToImage(imageCMYK));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private EventHandler eventHandler = new EventHandler<KeyEvent>() {
