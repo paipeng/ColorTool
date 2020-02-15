@@ -140,7 +140,6 @@ public class MainViewController implements Initializable {
 
         imagePath = this.getClass().getResource("/images/image_view_holder.png").getPath();
 
-        imagePath = "/Users/paipeng/Downloads/NanoGrid_0165000000040001.tif";
         showImage(imagePath);
 
         colorToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
