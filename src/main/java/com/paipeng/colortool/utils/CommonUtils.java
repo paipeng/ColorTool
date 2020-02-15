@@ -10,7 +10,7 @@ import java.util.Locale;
 public class CommonUtils {
     public static Locale getCurrentLanguageLocale() {
         Locale locale;
-        if (true) {
+        if (false) {
             locale = new Locale("zh", "Zh");
 
         } else {
