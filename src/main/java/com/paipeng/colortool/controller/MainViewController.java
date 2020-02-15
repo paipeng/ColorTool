@@ -248,12 +248,25 @@ public class MainViewController implements Initializable {
 
             // convert to RGB
             if (selectedColorPixel == 0) {
+                brightCMYK[0] = cyanColorSlider.getValue();
+                brightCMYK[1] = magentaColorSlider.getValue();
+                brightCMYK[2] = yellowColorSlider.getValue();
+                brightCMYK[3] = keyColorSlider.getValue();
+                logger.info("brightCMYK " + brightCMYK[0] + "-" + brightCMYK[1] + "-"
+                        + brightCMYK[2] + "-" + brightCMYK[3]);
+
                 brightColor = ImageUtils.convertCMYKToRGB(cyanColorSlider.getValue(),
                         magentaColorSlider.getValue(),
                         yellowColorSlider.getValue(),
                         keyColorSlider.getValue());
                 setRGBColorTextFields(brightColor);
             } else {
+                darkCMYK[0] = cyanColorSlider.getValue();
+                darkCMYK[1] = magentaColorSlider.getValue();
+                darkCMYK[2] = yellowColorSlider.getValue();
+                darkCMYK[3] = keyColorSlider.getValue();
+                logger.info("darkCMYK " + darkCMYK[0] + "-" + darkCMYK[1] + "-"
+                        + darkCMYK[2] + "-" + darkCMYK[3]);
                 darkColor = ImageUtils.convertCMYKToRGB(cyanColorSlider.getValue(),
                         magentaColorSlider.getValue(),
                         yellowColorSlider.getValue(),
