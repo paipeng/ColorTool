@@ -80,15 +80,15 @@
                   <content>
                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <Label layoutX="9.0" layoutY="20.0" text="%redColor" />
-                        <TextField fx:id="redColorTextField" layoutX="130.0" layoutY="15.0" prefWidth="60.0" />
+                        <TextField fx:id="redColorTextField" layoutX="210.0" layoutY="15.0" prefWidth="60.0" AnchorPane.rightAnchor="30.0" />
 
                         <Label layoutX="9.0" layoutY="50.0" text="%greenColor" />
-                        <TextField fx:id="greenColorTextField" layoutX="130.0" layoutY="45.0" prefWidth="60.0" />
+                        <TextField fx:id="greenColorTextField" layoutX="130.0" layoutY="45.0" prefWidth="60.0" AnchorPane.rightAnchor="30.0" />
                         <Label layoutX="9.0" layoutY="80.0" text="%blueColor" />
-                        <TextField fx:id="blueColorTextField" layoutX="130.0" layoutY="75.0" prefWidth="60.0" />
+                        <TextField fx:id="blueColorTextField" layoutX="130.0" layoutY="75.0" prefWidth="60.0" AnchorPane.rightAnchor="30.0" />
 
                         <Label layoutX="9.0" layoutY="110.0" text="%background" />
-                        <ColorPicker fx:id="pixelColorPicker" layoutX="105.0" layoutY="110.0" />
+                        <ColorPicker fx:id="pixelColorPicker" layoutX="105.0" layoutY="110.0" AnchorPane.rightAnchor="30.0" />
 
                      </AnchorPane>
                   </content>
@@ -122,7 +122,7 @@
          <AnchorPane maxWidth="300" prefHeight="438.0" prefWidth="300.0">
             <children>
 
-               <Button layoutX="95.0" layoutY="306.0" mnemonicParsing="false" text="%exportButton" fx:id="exportButton" />
+               <Button fx:id="exportButton" layoutX="95.0" layoutY="306.0" mnemonicParsing="false" text="%exportButton" />
             </children>
          </AnchorPane>
 
