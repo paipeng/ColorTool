@@ -1,6 +1,8 @@
 package com.paipeng.colortool.controller;
 
 import com.paipeng.colortool.utils.CommonUtils;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,9 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -47,9 +47,18 @@ public class MainViewController implements Initializable {
     @FXML
     private ImageView imageView;
 
+    @FXML
+    private ToggleGroup colorToggleGroup;
+
     private String imagePath;
 
     private Color backgroundColor;
+
+    private Color brightColor;
+    private Color darkColor;
+
+    private int selectedColorPixel;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.info("initialize");
@@ -94,6 +103,22 @@ public class MainViewController implements Initializable {
         imagePath = this.getClass().getResource("/images/image_view_holder.png").getPath();
 
         showImage(imagePath);
+
+        colorToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            public void changed(ObservableValue<? extends Toggle> ov,
+                                Toggle old_toggle, Toggle new_toggle) {
+                if (colorToggleGroup.getSelectedToggle() != null) {
+                    try {
+                        logger.info(colorToggleGroup.getSelectedToggle().getUserData().toString());
+                        selectedColorPixel = Integer.parseInt(colorToggleGroup.getSelectedToggle().getUserData().toString());
+                    } catch (NullPointerException e) {
+                        logger.error(e.getMessage());
+                    } catch (NumberFormatException e) {
+                        logger.error(e.getMessage());
+                    }
+                }
+            }
+        });
     }
 
     private void showImage(String imagePath) {
