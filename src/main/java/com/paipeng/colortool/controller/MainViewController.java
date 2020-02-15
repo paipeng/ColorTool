@@ -17,7 +17,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -36,7 +35,7 @@ import java.util.ResourceBundle;
 public class MainViewController implements Initializable {
     public static Logger logger = Logger.getLogger(MainViewController.class);
     private static Stage stage;
-    private static final String FXML_FILE = "/fxml/MainViewController.fxml";
+    private static final String FXML_FILE = "/fxml/contollers/MainViewController.fxml";
 
 
     @FXML
@@ -100,24 +99,24 @@ public class MainViewController implements Initializable {
         setCMYKColorTextFields(brightColor);
 
         pixelColorPicker.setOnAction(event -> {
-            logger.info(((ColorPicker)event.getTarget()).getValue().toString());
+            logger.info(((ColorPicker) event.getTarget()).getValue().toString());
             if (selectedColorPixel == 0) {
                 // brightColor
-                brightColor = ((ColorPicker)event.getTarget()).getValue();
+                brightColor = ((ColorPicker) event.getTarget()).getValue();
             } else {
                 // darkColor
-                darkColor = ((ColorPicker)event.getTarget()).getValue();
+                darkColor = ((ColorPicker) event.getTarget()).getValue();
             }
 
-            setRGBColorTextFields(((ColorPicker)event.getTarget()).getValue());
+            setRGBColorTextFields(((ColorPicker) event.getTarget()).getValue());
 
-            setCMYKColorTextFields(((ColorPicker)event.getTarget()).getValue());
+            setCMYKColorTextFields(((ColorPicker) event.getTarget()).getValue());
             changeColor(brightColor, darkColor);
         });
 
-        FileChooser fileChooser = new FileChooser();
 
         backgroundImageButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showOpenDialog(((Node) e.getTarget()).getScene().getWindow());
             logger.info("selected file: " + selectedFile.getAbsolutePath());
             imagePath = selectedFile.getAbsolutePath();
@@ -157,24 +156,14 @@ public class MainViewController implements Initializable {
             }
         });
 
-
         cyanColorSlider.setOnMouseReleased(sliderMouseReleaseEventHandler);
         magentaColorSlider.setOnMouseReleased(sliderMouseReleaseEventHandler);
         yellowColorSlider.setOnMouseReleased(sliderMouseReleaseEventHandler);
         keyColorSlider.setOnMouseReleased(sliderMouseReleaseEventHandler);
 
-
         setCMYKColorTextFields(brightColor);
 
         exportButton.setOnAction(e -> {
-            /*
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete " + 1 + " ?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
-            alert.showAndWait();
-
-            if (alert.getResult() == ButtonType.YES) {
-                //do stuff
-            }
-            */
             showExportDialog();
         });
     }
@@ -182,9 +171,9 @@ public class MainViewController implements Initializable {
 
     private void setRGBColorTextFields(Color color) {
         logger.info("setRGBColorTextFields " + color.toString());
-        redColorTextField.setText(String.valueOf((int)(color.getRed()*255)));
-        greenColorTextField.setText(String.valueOf((int)(color.getGreen()*255)));
-        blueColorTextField.setText(String.valueOf((int)(color.getBlue()*255)));
+        redColorTextField.setText(String.valueOf((int) (color.getRed() * 255)));
+        greenColorTextField.setText(String.valueOf((int) (color.getGreen() * 255)));
+        blueColorTextField.setText(String.valueOf((int) (color.getBlue() * 255)));
         //setCMYKColorTextFields(color);
     }
 
@@ -219,15 +208,15 @@ public class MainViewController implements Initializable {
     private EventHandler sliderMouseReleaseEventHandler = new EventHandler() {
         @Override
         public void handle(Event event) {
-            logger.info("sliderMouseReleaseEventHandler slider value: " + ((Slider)event.getSource()).getValue());
+            logger.info("sliderMouseReleaseEventHandler slider value: " + ((Slider) event.getSource()).getValue());
             if (cyanColorSlider == event.getSource()) {
-                cyanColorTextField.setText(String.valueOf(((Slider)event.getSource()).getValue()));
+                cyanColorTextField.setText(String.valueOf(((Slider) event.getSource()).getValue()));
             } else if (magentaColorSlider == event.getSource()) {
-                magentaColorTextField.setText(String.valueOf(((Slider)event.getSource()).getValue()));
+                magentaColorTextField.setText(String.valueOf(((Slider) event.getSource()).getValue()));
             } else if (yellowColorSlider == event.getSource()) {
-                yellowColorTextField.setText(String.valueOf(((Slider)event.getSource()).getValue()));
+                yellowColorTextField.setText(String.valueOf(((Slider) event.getSource()).getValue()));
             } else if (keyColorSlider == event.getSource()) {
-                keyColorTextField.setText(String.valueOf(((Slider)event.getSource()).getValue()));
+                keyColorTextField.setText(String.valueOf(((Slider) event.getSource()).getValue()));
             }
 
             // convert to RGB
@@ -246,10 +235,8 @@ public class MainViewController implements Initializable {
             }
 
             changeColor(brightColor, darkColor);
-
         }
     };
-
 
 
     private void changeColor(Color brightColor, Color darkColor) {
@@ -260,7 +247,7 @@ public class MainViewController implements Initializable {
         imageView.setImage(ImageUtils.convertBufferedImageToImage(bufferedImage2));
     }
 
-    private EventHandler eventHandler = new EventHandler<KeyEvent>() {
+    private EventHandler textViewEventHandler = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent event) {
             if (event.getCode() == KeyCode.ENTER) {
@@ -282,7 +269,7 @@ public class MainViewController implements Initializable {
         logger.info("start");
         try {
             ResourceBundle resources = ResourceBundle.getBundle("bundles.languages", CommonUtils.getCurrentLanguageLocale());
-            Parent root = FXMLLoader.load(MainViewController.class.getResource(FXML_FILE),resources);
+            Parent root = FXMLLoader.load(MainViewController.class.getResource(FXML_FILE), resources);
 
             //FXMLLoader fxmlLoader = new FXMLLoader();
             //fxmlLoader.setResources(resources);
@@ -295,6 +282,8 @@ public class MainViewController implements Initializable {
             stage.centerOnScreen();
             stage.setResizable(true);
             stage.show();
+
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -302,13 +291,12 @@ public class MainViewController implements Initializable {
 
 
     private void showExportDialog() {
-
-
         try {
             ResourceBundle resources = ResourceBundle.getBundle("bundles.languages", CommonUtils.getCurrentLanguageLocale());
-            Parent root = FXMLLoader.load(ExportDialogController.class.getResource(ExportDialogController.FXML_FILE),resources);
+            Parent root = FXMLLoader.load(ExportDialogController.class.getResource(ExportDialogController.FXML_FILE), resources);
 
-            final Scene scene = new Scene(root, 250, 150);
+            final Scene scene = new Scene(root, 800, 600);
+            scene.getStylesheets().add(getClass().getResource(ExportDialogController.CSS_FILE).toExternalForm());
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
@@ -318,30 +306,5 @@ public class MainViewController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-
-    private void drawShapes() {
-        /*
-        GraphicsContext gc = labelCanvas.getGraphicsContext2D();
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0, 0, labelCanvas.getWidth(), labelCanvas.getHeight());
-        */
-    }
-
-    private void drawImage(String imagePath) {
-        /*
-        GraphicsContext gc = labelCanvas.getGraphicsContext2D();
-
-        try {
-            FileInputStream input = new FileInputStream(imagePath);
-            Image image = new Image(input);
-
-            // Draw the Image
-            gc.drawImage(image, 0, 0, labelCanvas.getWidth(), labelCanvas.getHeight());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        */
     }
 }

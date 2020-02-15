@@ -1,14 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.paipeng.colortool.dialog.ExportDialogController"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.paipeng.colortool.dialog.ExportDialogController">
+   <children>
+      <DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0">
+          <header>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="80.0" prefWidth="800.0">
 
-</AnchorPane>
+                  <Label fx:id="dialogHeaderLabel" prefHeight="80.0" prefWidth="300.0" text="%exportDialogTitle" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+              </AnchorPane>
+          </header>
+          <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="800.0">
+               <children>
+                   <fx:define>
+                       <ToggleGroup fx:id="imageFormatToggleGroup" />
+                   </fx:define>
+                   <Label layoutX="57.0" layoutY="37.0" text="%imageFormat" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="30.0" />
+                  <RadioButton layoutX="72.0" layoutY="72.0" mnemonicParsing="false" text="%tiffFormat" userData="0" selected="true" toggleGroup="$imageFormatToggleGroup" >
+                  </RadioButton>
+                  <RadioButton layoutX="375.0" layoutY="72.0" mnemonicParsing="false" text="%pdfFormat" userData="1" toggleGroup="$imageFormatToggleGroup">
+                  </RadioButton>
+
+
+                   <fx:define>
+                       <ToggleGroup fx:id="colorFormatToggleGroup" />
+                   </fx:define>
+                   <Label layoutX="61.0" layoutY="159.0" text="%colorSpace" AnchorPane.leftAnchor="61.0" />
+                   <RadioButton layoutX="72.0" layoutY="195.0" mnemonicParsing="false" text="%rgbColor" userData="0" selected="true" toggleGroup="$colorFormatToggleGroup">
+                   </RadioButton>
+                   <RadioButton layoutX="375.0" layoutY="195.0" mnemonicParsing="false" text="%cmykColor" userData="1" toggleGroup="$colorFormatToggleGroup">
+                   </RadioButton>
+                  <Separator layoutX="16.0" layoutY="325.0" prefWidth="200.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                  <Button layoutX="541.0" layoutY="380.0" mnemonicParsing="false" text="%cancelButton" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="200.0" fx:id="cancelButton" />
+                  <Button layoutX="666.0" layoutY="380.0" mnemonicParsing="false" text="%saveButton" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="50.0" fx:id="saveButton" />
+
+
+
+                   <Label layoutX="61.0" layoutY="259.0" text="%printDpi" AnchorPane.leftAnchor="61.0" />
+                  <ComboBox layoutX="61.0" layoutY="298.0" prefWidth="150.0" fx:id="printDpiComboBox" />
+
+
+
+               </children>
+
+            </AnchorPane>
+          </content>
+          <expandableContent>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="800.0" />
+          </expandableContent>
+      </DialogPane>
+
+   </children>
+</VBox>
