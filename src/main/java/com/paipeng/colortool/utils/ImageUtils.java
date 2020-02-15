@@ -104,7 +104,7 @@ public class ImageUtils {
         return b;
     }
 
-    public static Color convertCMYKToRGB(float cyan, float magenta, float yellow, float key) {
+    public static Color convertCMYKToRGB(double cyan, double magenta, double yellow, double key) {
         // R = 255 × (1-C) × (1-K)
         // G = 255 × (1-M) × (1-K)
         // B = 255 × (1-Y) × (1-K)
@@ -122,12 +122,17 @@ public class ImageUtils {
         k = Math.max(color.getRed(), color.getGreen());
         k = 1 - Math.max(k, color.getBlue());
 
-        c = (1 - color.getRed() - k) / (1 - k);
+        if (1 - k != 0) {
+            c = (1 - color.getRed() - k) / (1 - k);
 
-        m = (1 - color.getGreen() - k) / (1 - k);
+            m = (1 - color.getGreen() - k) / (1 - k);
 
-        y = (1 - color.getBlue() - k) / (1 - k);
-
+            y = (1 - color.getBlue() - k) / (1 - k);
+        } else {
+            c = 0;
+            m = 0;
+            y = 0;
+        }
         cmyk[0] = c;
         cmyk[1] = m;
         cmyk[2] = y;

@@ -99,7 +99,7 @@ public class MainViewController implements Initializable {
         logger.info("initialize");
 
         setRGBColorTextFields(brightColor);
-
+        setCMYKColorTextFields(brightColor);
 
         pixelColorPicker.setOnAction(event -> {
             logger.info(((ColorPicker)event.getTarget()).getValue().toString());
@@ -113,6 +113,7 @@ public class MainViewController implements Initializable {
 
             setRGBColorTextFields(((ColorPicker)event.getTarget()).getValue());
 
+            setCMYKColorTextFields(((ColorPicker)event.getTarget()).getValue());
             changeColor(brightColor, darkColor);
         });
 
@@ -142,8 +143,11 @@ public class MainViewController implements Initializable {
 
                         if (selectedColorPixel == 0) {
                             setRGBColorTextFields(brightColor);
+
+                            setCMYKColorTextFields(brightColor);
                         } else {
                             setRGBColorTextFields(darkColor);
+                            setCMYKColorTextFields(darkColor);
                         }
                     } catch (NullPointerException e) {
                         logger.error(e.getMessage());
@@ -155,41 +159,10 @@ public class MainViewController implements Initializable {
         });
 
 
-
-        cyanColorSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                logger.info("cyan slider value: " + observable.getValue());
-                cyanColorTextField.setText(String.valueOf(observable.getValue()));
-
-            }
-        });
-        magentaColorSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                logger.info("magenta slider value: " + observable.getValue());
-                magentaColorTextField.setText(String.valueOf(observable.getValue()));
-            }
-        });
-        yellowColorSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                logger.info("yellow slider value: " + observable.getValue());
-                yellowColorTextField.setText(String.valueOf(observable.getValue()));
-            }
-        });
+        cyanColorSlider.setOnMouseReleased(sliderMouseReleaseEventHandler);
+        magentaColorSlider.setOnMouseReleased(sliderMouseReleaseEventHandler);
         yellowColorSlider.setOnMouseReleased(sliderMouseReleaseEventHandler);
-        keyColorSlider.setOnMouseReleased(event -> {
-            logger.info("key slider value: " + ((Slider)event.getTarget()).getValue());
-
-                });
-        keyColorSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                logger.info("key slider value: " + observable.getValue());
-                keyColorTextField.setText(String.valueOf(observable.getValue()));
-            }
-        });
+        keyColorSlider.setOnMouseReleased(sliderMouseReleaseEventHandler);
 
 
         setCMYKColorTextFields(brightColor);
@@ -197,11 +170,11 @@ public class MainViewController implements Initializable {
 
 
     private void setRGBColorTextFields(Color color) {
-
+        logger.info("setRGBColorTextFields " + color.toString());
         redColorTextField.setText(String.valueOf((int)(color.getRed()*255)));
         greenColorTextField.setText(String.valueOf((int)(color.getGreen()*255)));
         blueColorTextField.setText(String.valueOf((int)(color.getBlue()*255)));
-        setCMYKColorTextFields(color);
+        //setCMYKColorTextFields(color);
     }
 
     private void setCMYKColorTextFields(Color color) {
@@ -232,26 +205,40 @@ public class MainViewController implements Initializable {
         }
     }
 
-    private void changeColor(int selectedColorPixel, Color color) {
-        BufferedImage bufferedImage2 = ImageUtils.changeBufferedImageWithColor(bufferedImage, color, selectedColorPixel);
-        imageView.setImage(ImageUtils.convertBufferedImageToImage(bufferedImage2));
-    }
-
     private EventHandler sliderMouseReleaseEventHandler = new EventHandler() {
         @Override
         public void handle(Event event) {
             logger.info("sliderMouseReleaseEventHandler slider value: " + ((Slider)event.getSource()).getValue());
+            if (cyanColorSlider == event.getSource()) {
+                cyanColorTextField.setText(String.valueOf(((Slider)event.getSource()).getValue()));
+            } else if (magentaColorSlider == event.getSource()) {
+                magentaColorTextField.setText(String.valueOf(((Slider)event.getSource()).getValue()));
+            } else if (yellowColorSlider == event.getSource()) {
+                yellowColorTextField.setText(String.valueOf(((Slider)event.getSource()).getValue()));
+            } else if (keyColorSlider == event.getSource()) {
+                keyColorTextField.setText(String.valueOf(((Slider)event.getSource()).getValue()));
+            }
+
+            // convert to RGB
+            if (selectedColorPixel == 0) {
+                brightColor = ImageUtils.convertCMYKToRGB(cyanColorSlider.getValue(),
+                        magentaColorSlider.getValue(),
+                        yellowColorSlider.getValue(),
+                        keyColorSlider.getValue());
+                setRGBColorTextFields(brightColor);
+            } else {
+                darkColor = ImageUtils.convertCMYKToRGB(cyanColorSlider.getValue(),
+                        magentaColorSlider.getValue(),
+                        yellowColorSlider.getValue(),
+                        keyColorSlider.getValue());
+                setRGBColorTextFields(darkColor);
+            }
+
+            changeColor(brightColor, darkColor);
 
         }
     };
 
-
-
-    private void changeColor(int selectedColorPixel, int red, int green, int blue) {
-        logger.info("changeColor " + red + " " + green + " " + blue);
-        BufferedImage bufferedImage2 = ImageUtils.changeBufferedImageWithColor(bufferedImage, selectedColorPixel, red, green, blue);
-        imageView.setImage(ImageUtils.convertBufferedImageToImage(bufferedImage2));
-    }
 
 
     private void changeColor(Color brightColor, Color darkColor) {
