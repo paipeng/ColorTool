@@ -73,12 +73,24 @@
 
          <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-               <Tab text="Untitled Tab 1">
+               <Tab text="%rgbTab">
                   <content>
-                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" >
+                        <Label layoutX="9.0" layoutY="20.0" text="%redColor" />
+                        <TextField fx:id="redColorTextField" layoutX="130.0" layoutY="15.0" prefWidth="60.0" />
+
+                        <Label layoutX="9.0" layoutY="50.0" text="%greenColor" />
+                        <TextField fx:id="greenColorTextField" layoutX="130.0" layoutY="45.0" prefWidth="60.0" />
+                        <Label layoutX="9.0" layoutY="80.0" text="%blueColor" />
+                        <TextField fx:id="blueColorTextField" layoutX="130.0" layoutY="75.0" prefWidth="60.0" />
+
+                        <Label layoutX="9.0" layoutY="110.0" text="%background" />
+                        <ColorPicker fx:id="pixelColorPicker" layoutX="105.0" layoutY="110.0" />
+
+                     </AnchorPane>
                   </content>
                </Tab>
-               <Tab text="Untitled Tab 2">
+               <Tab text="%cmykTab">
                   <content>
                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>

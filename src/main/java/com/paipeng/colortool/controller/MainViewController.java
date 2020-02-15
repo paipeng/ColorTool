@@ -1,6 +1,7 @@
 package com.paipeng.colortool.controller;
 
 import com.paipeng.colortool.utils.CommonUtils;
+import com.paipeng.colortool.utils.ImageUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -45,10 +46,20 @@ public class MainViewController implements Initializable {
     private ColorPicker backgroundColorPicker;
 
     @FXML
+    private ColorPicker pixelColorPicker;
+
+    @FXML
     private ImageView imageView;
 
     @FXML
     private ToggleGroup colorToggleGroup;
+
+    @FXML
+    private TextField redColorTextField;
+    @FXML
+    private TextField greenColorTextField;
+    @FXML
+    private TextField blueColorTextField;
 
     private String imagePath;
 
@@ -59,12 +70,32 @@ public class MainViewController implements Initializable {
 
     private int selectedColorPixel;
 
+    private BufferedImage bufferedImage;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.info("initialize");
 
         backgroundColorPicker.setOnAction(event -> {
             backgroundColor = backgroundColorPicker.getValue();
+            //GraphicsContext gc = labelCanvas.getGraphicsContext2D();
+            //gc.setFill(backgroundColorPicker.getValue());
+            //gc.fillRect(0, 0, labelCanvas.getWidth(), labelCanvas.getHeight());
+        });
+
+        pixelColorPicker.setOnAction(event -> {
+            logger.info(((ColorPicker)event.getTarget()).getValue().toString());
+            if (selectedColorPixel == 0) {
+                // brightColor
+                brightColor = ((ColorPicker)event.getTarget()).getValue();
+            } else {
+                // darkColor
+                darkColor = ((ColorPicker)event.getTarget()).getValue();
+            }
+
+            redColorTextField.setText(String.valueOf((int)(((ColorPicker)event.getTarget()).getValue().getRed()*255)));
+            greenColorTextField.setText(String.valueOf((int)(((ColorPicker)event.getTarget()).getValue().getGreen()*255)));
+            blueColorTextField.setText(String.valueOf((int)(((ColorPicker)event.getTarget()).getValue().getBlue()*255)));
             //GraphicsContext gc = labelCanvas.getGraphicsContext2D();
             //gc.setFill(backgroundColorPicker.getValue());
             //gc.fillRect(0, 0, labelCanvas.getWidth(), labelCanvas.getHeight());
@@ -123,17 +154,22 @@ public class MainViewController implements Initializable {
 
     private void showImage(String imagePath) {
         try {
-            FileInputStream input = new FileInputStream(imagePath);
-            BufferedImage imageCMYK = ImageIO.read(new File(imagePath));
+            //FileInputStream input = new FileInputStream(imagePath);
+            //Image image = new Image(input);
+            bufferedImage = ImageIO.read(new File(imagePath));
 
-            Image image = new Image(input);
-            imageView.setImage(CommonUtils.convertBufferedImageToImage(imageCMYK));
+            imageView.setImage(ImageUtils.convertBufferedImageToImage(bufferedImage));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void changeColor(Color color, int selectedColorPixel) {
+        BufferedImage bufferedImage2 = ImageUtils.changeBufferedImageWithColor(bufferedImage, color, selectedColorPixel);
+        imageView.setImage(ImageUtils.convertBufferedImageToImage(bufferedImage2));
     }
 
     private EventHandler eventHandler = new EventHandler<KeyEvent>() {

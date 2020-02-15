@@ -20,19 +20,6 @@ public class CommonUtils {
         return locale;
     }
 
-    public static Image convertBufferedImageToImage(BufferedImage bf) {
-        WritableImage wr = null;
-        if (bf != null) {
-            wr = new WritableImage(bf.getWidth(), bf.getHeight());
-            PixelWriter pw = wr.getPixelWriter();
-            for (int x = 0; x < bf.getWidth(); x++) {
-                for (int y = 0; y < bf.getHeight(); y++) {
-                    pw.setArgb(x, y, bf.getRGB(x, y));
-                }
-            }
-        }
 
-        return wr;
-    }
 
 }
